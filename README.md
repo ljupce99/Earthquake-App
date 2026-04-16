@@ -135,7 +135,7 @@ On each USGS sync the backend:
 
 1. Fetches the GeoJSON feed — last 1 hour of events
 2. Skips features with `null` magnitude or `null` time
-3. Keeps only events with magnitude **≥ 1.0**
+3. filtering by greter than specific magniude  and filtering after a specific time 
 4. Deletes all existing DB records, then saves the filtered batch
 
 Configurable in `application.properties`:
@@ -171,7 +171,6 @@ cd backend
 ## Assumptions
 
 - The USGS `all_hour` feed is the data source — it updates continuously
-- Only earthquakes with magnitude **≥ 1.0** are stored (configurable)
 - On each sync, all existing records are deleted and replaced to avoid duplicates
 - Features with `null` magnitude or `null` time in the GeoJSON feed are silently skipped
 - The scheduler is disabled during tests
@@ -182,7 +181,6 @@ cd backend
 
 | Feature | Details |
 |---------|---------|
-| Map visualization | Interactive dark Leaflet map with color-coded circle markers |
 | Delete record | Delete individual earthquake records via UI or API |
 | Auto-refresh scheduler | Backend syncs USGS data every 5 minutes automatically |
 | Swagger / OpenAPI | Available at `/swagger-ui.html` |

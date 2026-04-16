@@ -11,7 +11,6 @@ Spring Boot 3.2 · Java 21 · PostgreSQL 15
 | Java | 21 | Must match `pom.xml` `<java.version>` |
 | Maven | — | Included via `mvnw` wrapper, no install needed |
 | PostgreSQL | 15+ | Or Docker Desktop to run it in a container |
-| Docker | optional | Only needed for the Dockerized DB option |
 | Internet | — | Outbound access to `earthquake.usgs.gov` |
 
 ---
@@ -64,39 +63,6 @@ Tests use an in-memory H2 database — no PostgreSQL required.
 
 ---
 
-## Database Configuration
-
-Default settings are in `src/main/resources/application.properties`:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/earthquakedb
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-spring.jpa.hibernate.ddl-auto=update
-```
-
-> **Note:** Hibernate creates the `earthquakes` table automatically on first run. No SQL migration scripts needed.
-
-### Docker database details
-
-| | |
-|-|-|
-| DB name | `earthquakedb` |
-| User | `postgres` |
-| Password | `postgres` |
-| Port | `5432 → 5432` |
-
-### Override settings without editing files
-
-```powershell
-$env:SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/earthquakedb"
-$env:SPRING_DATASOURCE_USERNAME="postgres"
-$env:SPRING_DATASOURCE_PASSWORD="postgres"
-.\mvnw.cmd spring-boot:run
-```
-
----
-
 ## REST API Endpoints
 
 All responses use the format:
@@ -137,7 +103,7 @@ On each USGS sync the backend:
 
 1. Fetches the GeoJSON feed from USGS (last 1 hour of events)
 2. Skips features with `null` magnitude or `null` time
-3. Keeps only events with magnitude **≥ 1.0** (configurable)
+3. Filters by greater than specific magnitude and/or filtering after a specific time 
 4. Deletes all existing DB records, then inserts the filtered batch
 
 To change the threshold:

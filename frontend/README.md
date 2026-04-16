@@ -56,7 +56,6 @@ frontend/
 ## Features
 
 - **Table view** — color-coded magnitude, place, time, delete with confirmation
-- **Map view** — interactive dark Leaflet map with circle markers per event
 - **Stats bar** — total events, max magnitude, average magnitude, M4+ count
 - **Filter panel** — filter by minimum magnitude and/or time
 - **Sync button** — manually fetch latest data from USGS via backend
