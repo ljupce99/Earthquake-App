@@ -17,6 +17,28 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - earthquake-network
+
+  backend:
+    image: ljupcejovanov99580/earthquake-app:1.0
+    container_name: earthquake-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/earthquakedb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - earthquake-network
 
 volumes:
   earthquake_data:
+
+networks:
+  earthquake-network:
+    driver: bridge
