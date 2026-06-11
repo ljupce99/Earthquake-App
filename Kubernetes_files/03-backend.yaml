@@ -1,0 +1,52 @@
+# Лекција 08+09 / Chapter 6 (Deployments) + Chapter 7 (Services)
+# Backend-от е stateless → Deployment.  2 replicas се распределуваат низ 3-те nodes.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: earthquake
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: ljupcejovanov99580/earthquake-app:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
+---
+# ClusterIP Service — внатрешен пристап. Frontend/Ingress го наоѓаат преку "backend".
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: earthquake
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 8080
+      targetPort: 8080
