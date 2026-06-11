@@ -1,0 +1,6 @@
+# Лекција 08 / Chapter 5 — Namespaces
+# Сè за апликацијата живее во овој namespace, одделено од другите проекти.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: earthquake
