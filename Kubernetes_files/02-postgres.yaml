@@ -1,8 +1,4 @@
-# Лекција 10 / Chapter 10 (Storage) + Chapter 12 (StatefulSets)
-# Базата е stateful → StatefulSet со свој постојан диск преку volumeClaimTemplates.
----
-# Headless Service (clusterIP: None) — стандард за StatefulSet.
-# Дава стабилно DNS име "postgres" преку кое backend-от се поврзува.
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,7 +19,7 @@ metadata:
   namespace: earthquake
 spec:
   serviceName: postgres
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: postgres
@@ -53,19 +49,19 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key: POSTGRES_PASSWORD
-            # postgres сака празен поддиректориум за податоците
+
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
-          # readiness probe = истото како healthcheck-от во compose
+
           readinessProbe:
             exec:
               command: ["pg_isready", "-U", "postgres"]
             initialDelaySeconds: 10
             periodSeconds: 10
-  # Секој Pod добива свој PVC (свој диск) — Chapter 10
+
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -74,5 +70,4 @@ spec:
         resources:
           requests:
             storage: 1Gi
-        # Без storageClassName → се користи default StorageClass на кластерот.
-        # Ако твојот кластер нема default, додади: storageClassName: <име>
+        
