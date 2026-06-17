@@ -19,7 +19,7 @@ services:
       - earthquake-network
 
   backend:
-    image: ljupcejovanov99580/earthquake-app:1.0
+    image: ljupcejovanov99580/earthquake-backend:latest
     container_name: earthquake-backend
     ports:
       - "8080:8080"
@@ -27,6 +27,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/earthquakedb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      APP_CORS_ALLOWED_ORIGINS: "http://localhost:3005,http://localhost"
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,10 +37,10 @@ services:
       - earthquake-network
 
   frontend:
-    image: ljupcejovanov99580/earthquake-app-frontend:1.1
+    image: ljupcejovanov99580/earthquake-frontend:latest
     container_name: earthquake-frontend
     ports:
-      - "3005:3005"
+      - "3005:80"
     depends_on:
       - backend
     restart: on-failure
