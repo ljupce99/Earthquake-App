@@ -11,4 +11,8 @@ kubectl apply -f 05-ingress.yaml
 
 kubectl get ingress -n earthquake
 
+
+
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
+
+--------------------------------------------------------------------------------
