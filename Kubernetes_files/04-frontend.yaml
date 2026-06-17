@@ -1,11 +1,10 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
   namespace: earthquake
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: frontend
@@ -18,7 +17,7 @@ spec:
         - name: frontend
           image: ljupcejovanov99580/earthquake-frontend:latest
           ports:
-            - containerPort: 3005
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -30,6 +29,6 @@ spec:
   selector:
     app: frontend
   ports:
-    - port: 3005
-      targetPort: 3005
+    - port: 80
+      targetPort: 80
       nodePort: 30005
