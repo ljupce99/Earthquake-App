@@ -1,0 +1,19 @@
+kubectl apply -f 00-namespace.yaml
+kubectl apply -f 01-config-and-secret.yaml
+kubectl apply -f 02-postgres.yaml
+kubectl apply -f 03-backend.yaml
+kubectl apply -f 04-frontend.yaml
+
+kubectl get pod -n earthquake
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
+kubectl apply -f 05-ingress.yaml
+
+kubectl get ingress -n earthquake
+
+
+
+kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
+
+--------------------------------------------------------------------------------
